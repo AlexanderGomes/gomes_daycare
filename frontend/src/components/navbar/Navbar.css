@@ -37,6 +37,11 @@
   transition: ease-in-out 0.3s;
 }
 
+.nav__links {
+position: absolute;
+left: 0;
+}
+
 /* Media queries for responsive design */
 @media screen and (max-width: 768px) {
   .nav__logo {
@@ -57,5 +62,18 @@
   .nav__links li {
     font-size: 12px;
     margin-right: 3px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .nav__links {
+    display: none;
+  }
+}
+
+
+@media screen and (min-width: 321px) {
+  .ham__icon {
+    display: none;
   }
 }

@@ -1,9 +1,11 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { logout } from "../../features/auth/AuthSlice";
+import { GiHamburgerMenu } from "react-icons/gi";
 import "./Navbar.css";
 
 const Navbar = () => {
+  const [toggle, setToggle] = useState(false);
   const dispatch = useDispatch();
 
   const Logout = () => {
@@ -22,6 +24,22 @@ const Navbar = () => {
         <li>Checkout</li>
         <li onClick={Logout}>logout</li>
       </ul>
+      <GiHamburgerMenu
+        className="ham__icon"
+        onClick={() => setToggle(!toggle)}
+      />
+
+      {toggle && (
+        <div className="navbar__overlay">
+          <div className="navbar__content">
+            <ul className="nav__links">
+              <li>Profile</li>
+              <li>Checkout</li>
+              <li onClick={Logout}>Logout</li>
+            </ul>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
