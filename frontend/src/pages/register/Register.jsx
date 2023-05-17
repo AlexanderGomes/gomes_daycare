@@ -9,6 +9,7 @@ import "./Register.css";
 
 const Register = () => {
   const [isEmailTaken, setIsEmailTaken] = useState(false);
+  const { token, isSuccess, message } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,8 +35,29 @@ const Register = () => {
         .min(8, "password must be 8 characters or longer")
         .oneOf([Yup.ref("password"), null], "Passwords don't match"),
     }),
-    onSubmit: (values) => {},
+    onSubmit: (values) => {
+      const userData = {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+        code: values.code,
+      };
+      dispatch(register(userData));
+    },
   });
+
+  useEffect(() => {
+    if (isSuccess || token) {
+      navigate("/profile");
+      dispatch(reset());
+    }
+  }, [token, isSuccess]);
+
+  const handleCleanUp = () => {
+    if (message) {
+      dispatch(reset());
+    }
+  };
 
   return (
     <div className="register__main">
@@ -48,6 +70,7 @@ const Register = () => {
           <p className="tagline__nav">
             Taking care of your kids with love and dedication!
           </p>
+          <p className={message ? "general__error" : ""}>{message}</p>
         </div>
 
         <div>
@@ -65,6 +88,7 @@ const Register = () => {
             onBlur={formik.handleBlur}
             value={formik.values.name}
             onChange={formik.handleChange}
+            onClick={handleCleanUp}
           />
         </div>
         <div>
@@ -85,6 +109,7 @@ const Register = () => {
             onBlur={formik.handleBlur}
             value={formik.values.email}
             onChange={formik.handleChange}
+            onClick={handleCleanUp}
           />
         </div>
         <div>
@@ -102,6 +127,7 @@ const Register = () => {
             onBlur={formik.handleBlur}
             value={formik.values.code}
             onChange={formik.handleChange}
+            onClick={handleCleanUp}
           />
         </div>
         <div>
@@ -120,6 +146,7 @@ input input--full"
             onBlur={formik.handleBlur}
             value={formik.values.password}
             onChange={formik.handleChange}
+            onClick={handleCleanUp}
           />
         </div>
         <div>
@@ -137,12 +164,14 @@ input input--full"
             onBlur={formik.handleBlur}
             value={formik.values.password2}
             onChange={formik.handleChange}
+            onClick={handleCleanUp}
           />
         </div>
-
-        <button className="register__btn btn btn--full" type="submit">
-          Register
-        </button>
+        <div className="btn">
+          <button className="register__btn" type="submit">
+            Register
+          </button>
+        </div>
         <div className="register__redirect">
           <p>
             Already have an account?{" "}
