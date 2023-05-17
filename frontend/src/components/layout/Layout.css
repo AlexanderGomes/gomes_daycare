@@ -1,0 +1,9 @@
+.layout__main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout__content {
+  margin-bottom: 100px;
+}

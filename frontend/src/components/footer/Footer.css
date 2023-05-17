@@ -1,0 +1,48 @@
+.footer__main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: auto;
+
+  padding: 20px;
+  gap: 20px;
+}
+
+.footer__logo {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.footer__logo__span {
+  color: rgba(255, 0, 0, 0.806);
+}
+
+.footer__bottom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Media queries for responsive design */
+@media screen and (max-width: 768px) {
+  .footer__logo {
+    font-size: 20px;
+  }
+
+  .footer__bottom p {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .footer__logo {
+    font-size: 18px;
+  }
+
+  .footer__bottom p {
+    font-size: 12px;
+  }
+}

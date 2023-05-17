@@ -6,7 +6,7 @@ module.exports = (app) => {
       const token = await Register(req.body);
       res.status(200).json(token);
     } catch (error) {
-      res.status(400).json(error.message);
+      res.status(400).json({ message: error.message });
     }
   });
 
@@ -15,7 +15,7 @@ module.exports = (app) => {
       const token = await Login(req.body);
       res.status(200).json(token);
     } catch (error) {
-      res.status(400).json(error.message);
+      res.status(400).json({ message: error.message });
     }
   });
 };
