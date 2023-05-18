@@ -103,13 +103,13 @@ margin-top: 10px;
   }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 330px) {
   .nav__links {
     display: none;
   }
 }
 
-@media screen and (min-width: 321px) {
+@media screen and (min-width: 331px) {
   .ham__icon {
     display: none;
   }
