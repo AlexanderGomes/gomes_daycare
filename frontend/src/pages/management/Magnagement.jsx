@@ -1,13 +1,30 @@
-import React, { useState } from "react";
-import { InvoiceCard } from "../../components";
+import React, { useEffect, useState } from "react";
+import { InvoiceCard, UserCard, SearchBar, Check } from "../../components";
 import "./Management.css";
+import axios from "axios";
 
 const Magnagement = () => {
   const [activeCommand, setActiveCommand] = useState("check-in");
+  const [unpaidInvoices, setUnpaidInvoices] = useState([]);
 
   const handleCommandClick = (command) => {
     setActiveCommand(command);
   };
+
+  const getUnpaidInvoices = async () => {
+    try {
+      const res = await axios.get("/invoices/unpaid");
+      setUnpaidInvoices(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (activeCommand === "invoices") {
+      getUnpaidInvoices();
+    }
+  }, [activeCommand]);
 
   return (
     <div>
@@ -22,72 +39,25 @@ const Magnagement = () => {
           <Check activeCommand={activeCommand} />
         ))}
       {activeCommand === "invoices" && (
-        <div className="invoice__management">
+        <div>
           <SearchBar />
-          <InvoiceCard />
-          <InvoiceCard />
-          <InvoiceCard />
-          <InvoiceCard />
-          <InvoiceCard />
+          {unpaidInvoices.map((invoices) => (
+            <div className="invoice__management" key={invoices._id}>
+              <InvoiceCard
+                name={invoices.name}
+                email={invoices.email}
+                price={invoices.price}
+                daycareName={invoices.daycareName}
+                numberOfKids={invoices.kids}
+                invoiceId={invoices._id}
+                getUnpaidInvoices={getUnpaidInvoices}
+                activeCommand={activeCommand}
+                userId={invoices.userId}
+              />
+            </div>
+          ))}
         </div>
       )}
-    </div>
-  );
-};
-
-const Check = ({ activeCommand }) => {
-  return (
-    <div>
-      {activeCommand === "check-in" ? (
-        <UserCard
-          name="alex"
-          email={"sander@gmail.com"}
-          paidBalance={30}
-          unpaidBalance={402}
-        />
-      ) : (
-        <UserCard
-          name="alex"
-          email={"check-out@gmail.com"}
-          paidBalance={30}
-          unpaidBalance={402}
-        />
-      )}
-    </div>
-  );
-};
-
-const UserCard = ({ name, email, paidBalance, unpaidBalance }) => {
-  return (
-    <>
-      <SearchBar />
-      <div className="user-card">
-        <h2 className="user-card__name">{name}</h2>
-        <p className="user-card__email">{email}</p>
-        <div className="user-card__balances">
-          <div className="user-card__balance user-card__balance--paid">
-            <span className="user-card__balance-label">Paid Balance:</span>
-            <span className="user-card__balance-amount">${paidBalance}</span>
-          </div>
-          <div className="user-card__balance user-card__balance--unpaid">
-            <span className="user-card__balance-label">Unpaid Balance:</span>
-            <span className="user-card__balance-amount">${unpaidBalance}</span>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
-
-const SearchBar = () => {
-  return (
-    <div className="search-bar">
-      <input
-        type="text"
-        placeholder="Search..."
-        className="search-bar__input"
-      />
-      <button className="search-bar__button">Search</button>
     </div>
   );
 };

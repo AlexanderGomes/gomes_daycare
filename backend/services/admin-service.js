@@ -21,17 +21,21 @@ module.exports.CreateCode = async () => {
 };
 
 module.exports.CheckIn = async (data) => {
-  const { userId, kids } = data;
+  const { userId, email, name, kids } = data;
 
   const currentPrice = calculatePrice(kids, false);
   const currentDate = getFormattedDate();
 
   const isAlreadyCheckIn = await Invoice.findOne({
-    $and: [{ lastCheckInDate: { $eq: currentDate } }, { isLate: false }],
+    $and: [
+      { lastCheckInDate: { $eq: currentDate } },
+      { isLate: false },
+      { userId: userId },
+    ],
   });
 
   if (isAlreadyCheckIn) {
-    throw new Error("client has been cheked-in for today");
+    throw new Error("client has been checked-in for today");
   }
 
   try {
@@ -40,6 +44,9 @@ module.exports.CheckIn = async (data) => {
       price: currentPrice,
       userId,
       lastCheckInDate: currentDate,
+      name,
+      email,
+      daycareName: "Gomes Daycare",
     });
 
     const updatedPrice = await this.GetUnPaidInvoices(userId);
@@ -112,10 +119,19 @@ module.exports.Late = async (data) => {
   }
 };
 
-module.exports.DeleteInvoice = async (invoiceId) => {
+module.exports.DeleteInvoice = async (invoiceId, userId) => {
   try {
     await Invoice.findByIdAndDelete(invoiceId);
-    return "invoice deleted";
+    const updatedPrice = await this.GetUnPaidInvoices(userId);
+
+    const updated_user = await User.findByIdAndUpdate(
+      userId,
+      {
+        $set: { unpaidBalance: updatedPrice },
+      },
+      { new: true }
+    );
+    return updated_user;
   } catch (error) {
     throw new Error(error.message);
   }
@@ -141,6 +157,7 @@ module.exports.GetUnPaidInvoices = async (userId) => {
       (sum, invoice) => sum + invoice.price,
       0
     );
+    console.log(totalPrice);
     return totalPrice;
   } catch (error) {
     throw new Error(error.message);

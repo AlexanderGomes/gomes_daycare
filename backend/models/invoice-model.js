@@ -25,7 +25,10 @@ const Invoice = mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  email: String,
+  name: String,
   date: String,
+  daycareName: String,
 });
 
 module.exports = mongoose.model("invoice", Invoice);

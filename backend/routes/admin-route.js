@@ -21,11 +21,11 @@ module.exports = (app) => {
       const user = await CheckIn(req.body);
       res.status(200).json(user);
     } catch (error) {
-      res.status(400).json(error.message);
+      res.status(400).json({ message: error.message });
     }
   });
 
-  app.post("/check-out", async (req, res) => {
+  app.put("/check-out", async (req, res) => {
     try {
       const user = await CheckOut(req.body.userId);
       res.status(200).json(user);
@@ -43,9 +43,10 @@ module.exports = (app) => {
     }
   });
 
-  app.delete("/invoice/delete", async (req, res) => {
+  app.delete("/invoice/delete/:invoiceId/:userId", async (req, res) => {
+    const { invoiceId, userId } = req.params;
     try {
-      const message = await DeleteInvoice(req.body.invoiceId);
+      const message = await DeleteInvoice(invoiceId, userId);
       res.status(200).json(message);
     } catch (error) {
       res.status(400).json(error.message);

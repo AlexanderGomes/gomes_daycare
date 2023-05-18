@@ -1,13 +1,49 @@
-import React from 'react'
-import './InvoiceCard.css'
+import React, { useEffect, useState } from "react";
+import "./InvoiceCard.css";
+import axios from "axios";
 
-const InvoiceCard = ({ userName, email, price, daycareName, numberOfKids }) => {
+const InvoiceCard = ({
+  name,
+  email,
+  price,
+  daycareName,
+  numberOfKids,
+  getUnpaidInvoices,
+  activeCommand,
+  invoiceId,
+  userId,
+}) => {
+  const [update, setUpdate] = useState(false);
+  const [message, setMessage] = useState(null);
+
+  const DeleteInvoice = async () => {
+    try {
+      const res = await axios.delete(`/invoice/delete/${invoiceId}/${userId}`);
+      if (res.status === 200) {
+        setUpdate(true);
+      }
+    } catch (error) {
+      setMessage(error.response.data.message);
+    }
+  };
+
+  useEffect(() => {
+    if (update) {
+      getUnpaidInvoices();
+    }
+
+    return () => {
+      setUpdate(false);
+    };
+  }, [update]);
+
   return (
     <div className="invoice-card">
+      <p onClick={DeleteInvoice}>delete</p>
       <h2>Invoice</h2>
       <div className="user-info">
         <p>
-          <strong>Name:</strong> {userName}
+          <strong>Name:</strong> {name}
         </p>
         <p>
           <strong>Email:</strong> {email}
@@ -28,5 +64,4 @@ const InvoiceCard = ({ userName, email, price, daycareName, numberOfKids }) => {
   );
 };
 
-
-export default InvoiceCard
+export default InvoiceCard;

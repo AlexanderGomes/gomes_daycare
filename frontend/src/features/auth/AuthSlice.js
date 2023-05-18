@@ -8,7 +8,7 @@ const initialState = {
   isError: false,
   isSuccess: false,
   isLoading: false,
-  isAdmin: true,
+  isAdmin: false,
   message: "",
 };
 
@@ -47,6 +47,9 @@ export const authSlice = createSlice({
       state.isError = false;
       state.message = "";
     },
+    setIsAdmin: (state, action) => {
+      state.isAdmin = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -84,5 +87,5 @@ export const authSlice = createSlice({
   },
 });
 
-export const { reset } = authSlice.actions;
+export const { reset, setIsAdmin } = authSlice.actions;
 export default authSlice.reducer;

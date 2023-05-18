@@ -33,7 +33,7 @@ module.exports.Register = async (data) => {
     });
 
     const token = jwt.sign({ userId: existingUser._id }, process.env.JWT);
-    
+
     await Code.deleteOne({ code: code });
     return token;
   } catch (error) {
@@ -46,6 +46,8 @@ module.exports.Login = async (data) => {
   try {
     const existingUser = await User.findOne({ email });
 
+    console.log(existingUser);
+
     if (!existingUser) {
       throw new Error("wrong email");
     }
@@ -56,7 +58,10 @@ module.exports.Login = async (data) => {
       throw new Error("wrong password");
     }
 
-    const token = jwt.sign({ userId: existingUser._id }, process.env.JWT);
+    const token = jwt.sign(
+      { userId: existingUser._id, isAdmin: existingUser.isAdmin },
+      process.env.JWT
+    );
 
     return token;
   } catch (error) {
