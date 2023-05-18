@@ -1,10 +1,26 @@
-import React from 'react'
-import './Checkout.css'
+import React, { useState } from "react";
+import { InvoiceCard } from "../../components";
+import "./Checkout.css";
 
 const Checkout = () => {
-  return (
-    <div>Checkout</div>
-  )
-}
+  const [invoice, setInvoice] = useState();
 
-export default Checkout
+  return (
+    <div className="check__main">
+      <div className="check__top">
+        <p>Total: $182</p>
+        <PayBtn />
+      </div>
+      <InvoiceCard />
+      <InvoiceCard />
+      <InvoiceCard />
+      <InvoiceCard />
+    </div>
+  );
+};
+
+const PayBtn = () => {
+  return <button className="btn__pay">checkout</button>;
+};
+
+export default Checkout;

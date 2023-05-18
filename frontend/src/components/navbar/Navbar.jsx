@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { logout } from "../../features/auth/AuthSlice";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { AiOutlineClose } from "react-icons/ai";
+import { Link } from "react-router-dom";
 import "./Navbar.css";
 
 const Navbar = () => {
@@ -20,8 +22,12 @@ const Navbar = () => {
         </p>
       </div>
       <ul className="nav__links">
-        <li>Profile</li>
-        <li>Checkout</li>
+        <Link to={"/profile"} className="link">
+          <li>Profile</li>
+        </Link>
+        <Link to={"/checkout"} className="link">
+          <li>Checkout</li>
+        </Link>
         <li onClick={Logout}>logout</li>
       </ul>
       <GiHamburgerMenu
@@ -32,7 +38,10 @@ const Navbar = () => {
       {toggle && (
         <div className="navbar__overlay">
           <div className="navbar__content">
-            <ul className="nav__links">
+            <div className="close__icon">
+              <AiOutlineClose onClick={() => setToggle(!toggle)} />
+            </div>
+            <ul className="links">
               <li>Profile</li>
               <li>Checkout</li>
               <li onClick={Logout}>Logout</li>
